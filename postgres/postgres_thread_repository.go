@@ -3,20 +3,23 @@ package postgres
 import "todotom/go-gin-restful-api/forum"
 
 type PostgresThreadRepository struct {
-	threads []forum.Thread
+	postgresTable PostgresTable[*forum.Thread]
 }
 
-func ProvideThreadRepository() forum.ThreadRepository {
-	return PostgresThreadRepository{
-		threads: []forum.Thread{
-			{
-				Id:    "123",
-				Title: "lol",
-			},
-		},
+func ProvideThreadRepository(threadPostgresTable PostgresTable[*forum.Thread]) forum.ThreadRepository {
+	return PostgresThreadRepository{threadPostgresTable}
+}
+
+func ProvideThreadPostgresTable(postgresClient PostgresClient) PostgresTable[*forum.Thread] {
+	return ProvidePostgresTable[*forum.Thread]("thread", postgresClient)
+}
+
+func (repository PostgresThreadRepository) GetThreads() []*forum.Thread {
+	thread, err := repository.postgresTable.GetOne("123")
+	if err == nil {
+		return []*forum.Thread{}
 	}
-}
-
-func (repository PostgresThreadRepository) GetThreads() []forum.Thread {
-	return repository.threads
+	return []*forum.Thread{
+		*thread,
+	}
 }

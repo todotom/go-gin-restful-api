@@ -8,6 +8,6 @@ func ProvideGetThreadsService(threadRepository ThreadRepository) GetThreadsServi
 	return GetThreadsService{threadRepository}
 }
 
-func (service GetThreadsService) Run() []Thread {
+func (service GetThreadsService) Run() []*Thread {
 	return service.threadRepository.GetThreads()
 }

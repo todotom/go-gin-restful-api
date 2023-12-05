@@ -13,6 +13,8 @@ import (
 
 func InitializeContainer() Container {
 	wire.Build(
+		postgres.ProvidePostgresClient,
+		postgres.ProvideThreadPostgresTable,
 		postgres.ProvideThreadRepository,
 		forum.ProvideGetThreadsService,
 		rest.ProvideGetThreadsHandler,

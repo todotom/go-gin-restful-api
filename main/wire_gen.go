@@ -15,7 +15,9 @@ import (
 // Injectors from wire.go:
 
 func InitializeContainer() Container {
-	threadRepository := postgres.ProvideThreadRepository()
+	postgresClient := postgres.ProvidePostgresClient()
+	postgresTable := postgres.ProvideThreadPostgresTable(postgresClient)
+	threadRepository := postgres.ProvideThreadRepository(postgresTable)
 	getThreadsService := forum.ProvideGetThreadsService(threadRepository)
 	getThreadsHandler := rest.ProvideGetThreadsHandler(getThreadsService)
 	controller := rest.ProvideController(getThreadsHandler)
